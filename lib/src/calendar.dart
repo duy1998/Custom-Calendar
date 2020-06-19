@@ -204,9 +204,7 @@ class TableCalendar extends StatefulWidget {
         assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays != null),
-        assert(weekendDays.isNotEmpty
-            ? weekendDays.every((day) => day >= DateTime.monday && day <= DateTime.sunday)
-            : true),
+        assert(weekendDays.isNotEmpty ? weekendDays.every((day) => day >= DateTime.monday && day <= DateTime.sunday) : true),
         super(key: key);
 
   @override
@@ -282,7 +280,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   void _onDayLongPressed(DateTime day) {
     if (widget.onDayLongPressed != null) {
       widget.onDayLongPressed(
-        day, 
+        day,
         widget.calendarController.visibleEvents[_getEventKey(day)] ?? [],
         widget.calendarController.visibleHolidays[_getHolidayKey(day)] ?? [],
       );
@@ -354,6 +352,11 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           if (widget.headerVisible) _buildHeader(),
+          Table(
+            children: <TableRow>[
+              _buildDaysOfWeek(),
+            ],
+          ),
           Padding(
             padding: widget.calendarStyle.contentPadding,
             child: _buildCalendarContent(),
@@ -365,13 +368,14 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   Widget _buildHeader() {
     final children = [
-      widget.headerStyle.showLeftChevron ?
-        _CustomIconButton(
-          icon: widget.headerStyle.leftChevronIcon,
-          onTap: _selectPrevious,
-          margin: widget.headerStyle.leftChevronMargin,
-          padding: widget.headerStyle.leftChevronPadding,
-        ) : Container(),
+      widget.headerStyle.showLeftChevron
+          ? _CustomIconButton(
+              icon: widget.headerStyle.leftChevronIcon,
+              onTap: _selectPrevious,
+              margin: widget.headerStyle.leftChevronMargin,
+              padding: widget.headerStyle.leftChevronPadding,
+            )
+          : Container(),
       Expanded(
         child: GestureDetector(
           onTap: _onHeaderTapped,
@@ -385,13 +389,14 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           ),
         ),
       ),
-      widget.headerStyle.showRightChevron ?
-        _CustomIconButton(
-          icon: widget.headerStyle.rightChevronIcon,
-          onTap: _selectNext,
-          margin: widget.headerStyle.rightChevronMargin,
-          padding: widget.headerStyle.rightChevronPadding,
-        ) : Container()
+      widget.headerStyle.showRightChevron
+          ? _CustomIconButton(
+              icon: widget.headerStyle.rightChevronIcon,
+              onTap: _selectNext,
+              margin: widget.headerStyle.rightChevronMargin,
+              padding: widget.headerStyle.rightChevronPadding,
+            )
+          : Container()
     ];
 
     if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1) {
@@ -501,8 +506,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       switchInCurve: Curves.decelerate,
       transitionBuilder: (child, animation) {
         return SlideTransition(
-          position:
-              Tween<Offset>(begin: Offset(widget.calendarController._dx, 0), end: Offset(0, 0)).animate(animation),
+          position: Tween<Offset>(begin: Offset(widget.calendarController._dx, 0), end: Offset(0, 0)).animate(animation),
           child: child,
         );
       },
@@ -618,10 +622,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
               right: widget.calendarStyle.markersPositionRight,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: events
-                    .take(widget.calendarStyle.markersMaxAmount)
-                    .map((event) => _buildMarker(eventKey, event))
-                    .toList(),
+                children: events.take(widget.calendarStyle.markersMaxAmount).map((event) => _buildMarker(eventKey, event)).toList(),
               ),
             ),
           );
@@ -661,8 +662,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final isToday = widget.builders.todayDayBuilder != null && tIsToday;
     final isOutsideHoliday = widget.builders.outsideHolidayDayBuilder != null && tIsOutside && tIsHoliday;
     final isHoliday = widget.builders.holidayDayBuilder != null && !tIsOutside && tIsHoliday;
-    final isOutsideWeekend =
-        widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
+    final isOutsideWeekend = widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
     final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend && !tIsHoliday;
     final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend && !tIsHoliday;
 
