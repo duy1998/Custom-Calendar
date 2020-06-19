@@ -352,10 +352,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           if (widget.headerVisible) _buildHeader(),
-          Table(
-            children: <TableRow>[
-              _buildDaysOfWeek(),
-            ],
+          Padding(
+            padding: widget.calendarStyle.contentPadding,
+            child: Table(
+              children: <TableRow>[
+                _buildDaysOfWeek(),
+              ],
+            ),
           ),
           Padding(
             padding: widget.calendarStyle.contentPadding,
